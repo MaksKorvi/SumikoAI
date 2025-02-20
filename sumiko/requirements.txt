@@ -1,0 +1,9 @@
+transformers
+datasets
+python-telegram-bot
+regex
+accelerate
+bitsandbytes
+sentencepiece
+torch
+torchvision
