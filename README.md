@@ -1,3 +1,7 @@
+# СУМИКО НАХОДИТСЯ В РАЗРАБОТКЕ, НА ДАННЫЙ МОМЕНТ ВЕРСИЯ БОТА BETA-1DC25
+# SUMIKO IS UNDER DEVELOPMENT, CURRENTLY THE BOT VERSION IS BETA-1DC25
+
+
 # Sumiko Ichikawa - Виртуальная девушка-нэкомата 🐾
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
