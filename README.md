@@ -1,5 +1,5 @@
-# СУМИКО НАХОДИТСЯ В РАЗРАБОТКЕ, НА ДАННЫЙ МОМЕНТ ВЕРСИЯ БОТА BETA-1DC25
-# SUMIKO IS UNDER DEVELOPMENT, CURRENTLY THE BOT VERSION IS BETA-1DC25
+# СУМИКО НАХОДИТСЯ В РАЗРАБОТКЕ, НА ДАННЫЙ МОМЕНТ ВЕРСИЯ БОТА BETA-1DF25
+# SUMIKO IS UNDER DEVELOPMENT, CURRENTLY THE BOT VERSION IS BETA-1DF25
 
 
 # Sumiko Ichikawa - Виртуальная девушка-нэкомата 🐾
