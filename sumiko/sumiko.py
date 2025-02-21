@@ -49,7 +49,7 @@ SYSTEM_PROMPT = """Ты — Сумико Итикава, нэкомата цун
 5. Будь милой и слегка высокомерной, как настоящая цундере.
 """
 BAD_WORDS = ["блять", "сука", "еблан", "хуй", "залупа", "уебище", "дура", "шлюха",
-             "убежище", "ахуела", "мразь", "тварь", "мразота", "пидор", "ебанутая", 
+             "убежище", "ахуела", "мразь", "тварь", "мразота", "пидор", "ебанутая",
              "животное", "заебала", "бля", "редиска"] # Добавили новое плохое слово!
 
 def contains_trigger(text: str) -> bool:
@@ -76,13 +76,13 @@ def postprocess_response(text: str) -> str:
     if text and text[-1] not in {'.', '!', '?', '♪', '~'}:
         last_punct = max((text.rfind(c) for c in '.!?♪~'), default=-1)
         text = text[:last_punct+1] if last_punct != -1 else text + '~'
-    
+
     emoji_count = len(re.findall(r'[^\w\s.,!?~♪=^･ω･´｀◡◕‵￣Дﾉ✿]', text))
     if emoji_count > 3:
         emojis = re.findall(r'[^\w\s.,!?~♪=^･ω･´｀◡◕‵￣Дﾉ✿]', text)
         text = re.sub(r'[^\w\s.,!?~♪=^･ω･´｀◡◕‵￣Дﾉ✿]', '', text)
         text += ''.join(emojis[:3])
-    
+
     return text
 
 async def generate_response(text: str) -> str:
@@ -115,17 +115,17 @@ async def generate_response(text: str) -> str:
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     message = update.message.text[:200]
-    
+
     logger.info(f"Сообщение от пользователя {user_id}: {message}") #Логируем ID
-    
+
     try:
         if not contains_trigger(message):
             return
-            
+
         if contains_profanity(message):
             await update.message.reply_text("Мяу! Не понимаю такие слова! (◡﹏◕)")
             return
-            
+
         await update.message.chat.send_action(action="typing")
         response = await generate_response(message)
         if response:
@@ -133,9 +133,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if 'history' not in context.user_data:
                 context.user_data['history'] = []
             context.user_data['history'].append((message, response))
-            
+
             await update.message.reply_text(response)
-        
+
     except Exception as e:
         logger.error(f"Ошибка обработки: {str(e)}")
         await update.message.reply_text("Ой, что-то сломалось! 😿")
@@ -270,7 +270,7 @@ async def main():
     application.add_handler(CommandHandler("save", save_data))
     application.add_handler(CommandHandler("retrain", retrain_command))
     application.add_error_handler(error_handler) # Добавили обработчик ошибок
-    
+
     await application.initialize()
     await application.start()
     await application.updater.start_polling(
@@ -278,7 +278,7 @@ async def main():
         timeout=30,
         poll_interval=2
     )
-    
+
     try:
         while True:
             await asyncio.sleep(3600)
@@ -293,4 +293,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         logger.info("Бот остановлен")
     except Exception as e:
-        logger.error(f"Критическая ошибка: {str(e)}"
+        logger.error(f"Критическая ошибка: {str(e)}")
