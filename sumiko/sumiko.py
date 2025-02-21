@@ -34,7 +34,7 @@ AUTHORIZED_USER_ID = 6208786109 #ID авторизованного пользо�
 try:
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_NAME) #Использовать AutoModelForSeq2SeqLM
-    model.to("cuda") #Перемещаем модель на GPU
+    # model.to("cuda") #Перемещаем модель на GPU - ЗАКОММЕНТИРОВАНО ДЛЯ ИСПОЛЬЗОВАНИЯ CPU
     logger.info(f"Модель {MODEL_NAME} успешно загружена.")
 except Exception as e:
     logger.error(f"Ошибка загрузки модели: {str(e)}")
@@ -93,7 +93,7 @@ async def generate_response(text: str) -> str:
         #Формируем запрос для FLAN-T5
         prompt = f"Ответь на вопрос как нэкомата цундере по имени Сумико Итикава: {text}"
 
-        input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to("cuda") #Переносим на GPU
+        input_ids = tokenizer(prompt, return_tensors="pt").input_ids #Переносим на GPU
 
         outputs = model.generate(input_ids,
                                  max_length=MAX_RESPONSE_LENGTH,
@@ -230,7 +230,7 @@ async def retrain_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             logging_dir="./logs",            # Папка для логирования
             logging_steps=10,                # Логирование каждые 10 шагов
             save_steps=500,                 # Сохранение модели каждые 500 шагов
-            fp16=True,                       # Использовать fp16 для экономии памяти (если поддерживается GPU)
+            fp16=False,                       # Использовать fp16 для экономии памяти (если поддерживается GPU)
             gradient_accumulation_steps=2, # Увеличьте, если не хватает памяти
             optim="adafactor", # Оптимизатор для экономии памяти
             max_grad_norm=0.3, # Gradient clipping
@@ -242,9 +242,9 @@ async def retrain_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             model=model,
             args=training_args,
             train_dataset=tokenized_dataset, #Исправлено
-            data_collator=lambda data: {"input_ids": torch.stack([f['input_ids'] for f in data]).to("cuda"), #Переносим на GPU
-                                       "attention_mask": torch.stack([f['attention_mask'] for f in data]).to("cuda"), #Переносим на GPU
-                                       "labels": torch.stack([f['labels'] for f in data]).to("cuda")} #Переносим на GPU
+            data_collator=lambda data: {"input_ids": torch.stack([f['input_ids'] for f in data]), #Переносим на GPU
+                                       "attention_mask": torch.stack([f['attention_mask'] for f in data]), #Переносим на GPU
+                                       "labels": torch.stack([f['labels'] for f in data])} #Переносим на GPU
         )
 
         # 5. Обучение модели
@@ -293,4 +293,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         logger.info("Бот остановлен")
     except Exception as e:
-        logger.error(f"Критическая ошибка: {str(e)}")
+        logger.error(f"Критическая ошибка: {str(e)}"
